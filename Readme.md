@@ -21,8 +21,50 @@
     - Cosine
 
 ## Usage examples in  `examples` directory:
-Gemini:
+
+### Gemini:
 `examples/gemini/main.go`
 
-Bedrock:
+```GO
+	// init vectorDB - becktordb - repository
+	db := becktordb.NewVectorDB(databaseName)
+	// init business layer - services
+	services := services.NewBectorDBservice(db)
+	// Init gemini
+	gemini := services.Gemini.Init()
+	// embedd all documents in the directoriesForRetrieval directory
+	err = gemini.GeminiEmbeddingsPath(directoriesForRetrieval, 50)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Query vectorDB - becktordb for similarity
+	results, err := gemini.GeminiEmbeddingsQuery("What going on today?", 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Top 2 results:", results)
+
+```
+
+### Bedrock:
 `examples/bedrock/main.go`
+
+```Go
+db := becktordb.NewVectorDB(databaseName)
+	// init business layer - services
+	services := services.NewBectorDBservice(db)
+	// init bedrock
+	bedrock := services.Bedrock.Init()
+	err = bedrock.BedrockEmbeddingsPath(directoriesForRetrieval, 50)
+	if err != nil {
+		log.Fatal(err)
+	}
+    // Query vectorDB - becktordb for similarity
+	results, err := bedrock.BedrockEmbeddingsQuery("What going on today?", 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Top 2 results:", results)
+
+```
+
